@@ -1,0 +1,192 @@
+<footer> <!-- Added a footer for the form -->
+    <hr> <!-- Separator -->
+    <h2>Check Symptoms</h2>
+    <form id="symptom-form">
+        <label for="symptoms">Enter Additional Symptoms:</label><br>
+        <input type="text" id="symptoms" name="symptoms" placeholder="e.g., itching, redness, fever" size="40">
+        <button type="submit">Check Diagnosis</button>
+    </form>
+
+    <!-- Loading Spinner -->
+    <div id="loading" style="display: none; margin-top: 15px; text-align: center;">
+        <!-- You might need to place loading.gif in your static folder -->
+        <!-- <img src="{{ url_for('static', filename='loading.gif') }}" alt="Loading..." width="50px"> -->
+        <p>Loading...</p> <!-- Simple text fallback -->
+    </div>
+
+    <div id="symptom-response" style="margin-top: 15px;"></div>
+</footer>
+
+<script>
+
+
+document.getElementById("symptom-form").onsubmit = async function(event) {
+    event.preventDefault();
+
+    const symptomResponseDiv = document.getElementById("symptom-response");
+    const loadingDiv = document.getElementById("loading");
+    const symptomsInput = document.getElementById("symptoms");
+    const symptoms = symptomsInput.value.trim(); // Trim whitespace
+
+    if (!symptoms) {
+        symptomResponseDiv.innerHTML = `<p style="color: orange;"><b>Please enter some symptoms.</b></p>`;
+        return; // Don't submit if empty
+    }
+
+    // Show loading spinner
+    loadingDiv.style.display = "block";
+    symptomResponseDiv.innerHTML = ""; // Clear previous response
+
+    try {
+        // Ensure the /symptom_checker route exists in your Flask app
+        const response = await fetch("/symptom_checker", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ symptoms: symptoms }) // Send trimmed value
+        });
+
+        // Check if response is ok (status code 200-299)
+        if (!response.ok) {
+             // Try to get error message from response body
+             let errorMsg = `Server error: ${response.status} ${response.statusText}`;
+             try {
+                 const errorData = await response.json();
+                 errorMsg = errorData.error || errorMsg; // Use specific error if provided
+             } catch (e) {
+                 // Ignore if response body is not JSON
+             }
+             throw new Error(errorMsg);
+        }
+
+        const data = await response.json();
+
+        // Hide loading spinner
+        loadingDiv.style.display = "none";
+
+        // Show AI diagnosis result - use safe HTML rendering if needed
+        // Assuming data.response is plain text or safe HTML
+        symptomResponseDiv.innerHTML = `<p><b>AI Diagnosis Suggestion:</b></p><div style="white-space: pre-wrap;">${data.response || 'No suggestion provided.'}</div>`;
+
+    } catch (error) {
+        console.error("Symptom Checker Error:", error);
+
+        // Hide loading spinner even if there's an error
+        loadingDiv.style.display = "none";
+
+        // Display a user-friendly error message
+        symptomResponseDiv.innerHTML = `<p style="color: red;"><b>Error:</b> ${error.message || 'Failed to get response. Check console for details.'}</p>`;
+    }
+};
+</script> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+     * Handles sending the user's query to the backend and displaying the response.
+     */
+    async function sendQuery() {
+        // Get the trimmed user input.
+        const query = userInput.value.trim();
+        chatResponseStatus.textContent = ''; // Clear previous status/error messages.
+
+        // Do nothing if the input is empty.
+        if (!query) {
+            // Optionally provide feedback, e.g., shake the input box
+            // chatResponseStatus.textContent = "Please type a message.";
+            return;
+        }
+
+        // 1. Add the user's message to the chat history.
+        addMessageToHistory("You", query, "user-message");
+
+        // 2. Clear the input field for the next message.
+        userInput.value = "";
+
+        // 3. Show a loading indicator in the chat.
+        addLoadingMessage();
+        sendButton.disabled = true; // Prevent multiple submissions.
+
+        try {
+            // 4. Send the query to the Flask backend endpoint '/chat'.
+            const response = await fetch("/chat", { // Ensure this URL matches your Flask route
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ message: query }) // Send the query in JSON format.
+            });
+
+            // 5. Remove the loading indicator now that we have a response (or error).
+            removeLoadingMessage();
+
+            const data = await response.json(); // Attempt to parse the JSON response body.
+
+            // Check if the HTTP response status indicates success (e.g., 200 OK).
+            if (!response.ok) {
+                // If not OK, use the error message from the backend JSON if available,
+                // otherwise construct a generic error message.
+                const errorMsg = data.response || `Error: ${response.status} ${response.statusText}`;
+                throw new Error(errorMsg); // Throw an error to be caught below.
+            }
+
+            // 6. If successful, add the bot's response to the chat history.
+            addMessageToHistory("Bot", data.response, "bot-message");
+
+        } catch (error) {
+            // 7. If any error occurred (network issue, server error, etc.).
+            console.error("Chat Error:", error); // Log the detailed error to the console.
+            // Display a user-friendly error message in the chat history or status area.
+            addMessageToHistory("System", `Sorry, an error occurred: ${error.message}`, "bot-message"); // Show error as a system/bot message
+            // chatResponseStatus.textContent = `Error: ${error.message}`; // Or show in the status area
+        } finally {
+            // 8. This block always runs, whether there was an error or not.
+            sendButton.disabled = false; // Re-enable the send button.
+            userInput.focus(); // Set focus back to the input field for convenience.
+        }
+    }
+
+    // --- Event Listeners ---
+
+    // Check if all required elements exist before adding listeners.
+    if (chatForm && userInput && sendButton && chatHistory) {
+
+        // Add listener for the form submission (e.g., pressing Enter in the input).
+        chatForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission (which causes a page reload).
+            sendQuery(); // Call the function to handle sending the query.
+        });
+
+        // Note: A separate 'click' listener for the button is often redundant
+        // if the button's type="submit" and it's inside the form. The form's 'submit'
+        // event handles both Enter key and button click in most browsers.
+        // If your button was type="button", you would need this:
+        // sendButton.addEventListener("click", sendQuery);
+
+    } else {
+        // Log an error to the console if any essential elements are missing.
+        console.error("Chatbot UI elements not found. Chat functionality may be broken.");
+        if (!chatForm) console.error("Element with ID 'chatForm' not found.");
+        if (!userInput) console.error("Element with ID 'userInput' not found.");
+        if (!sendButton) console.error("Element with ID 'sendButton' not found.");
+        if (!chatHistory) console.error("Element with ID 'chatHistory' not found.");
+    }
+
+}); // End of DOMContentLoaded listener

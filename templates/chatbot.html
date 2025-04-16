@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Info Assistant</title>
+    <!-- Link to your main stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Basic Chat History Styling (can be moved to styles.css) */
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #chatHistory {
+            height: 450px; /* Adjust as needed */
+            overflow-y: scroll; /* Enable vertical scrolling */
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 15px; /* More rounded bubbles */
+            max-width: 85%;
+            word-wrap: break-word; /* Ensure long words break */
+            line-height: 1.5; /* Improve readability */
+            /* CRITICAL FOR POINT-WISE DISPLAY */
+            white-space: pre-wrap;
+        }
+        .user-message {
+            background-color: #007bff; /* User message color */
+            color: white;
+            margin-left: auto; /* Align right */
+            text-align: left; /* Keep text aligned left within bubble */
+            border-bottom-right-radius: 5px; /* Slightly flatten corner */
+        }
+        .bot-message {
+            background-color: #e9ecef; /* Bot message color */
+            color: #333;
+            margin-right: auto; /* Align left */
+            border-bottom-left-radius: 5px; /* Slightly flatten corner */
+        }
+         /* Style for sender labels (You/Bot) */
+         .message strong {
+            display: block;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+            color: inherit; /* Inherit color from parent (.user-message or .bot-message) */
+            opacity: 0.8; /* Slightly less prominent */
+         }
+         .user-message strong {
+             color: #e0e0e0; /* Lighter label for user */
+         }
+         .bot-message strong {
+             color: #555; /* Darker label for bot */
+         }
+
+        .loading-message {
+            color: #888;
+            font-style: italic;
+            text-align: center;
+            padding: 10px;
+        }
+        #chatForm {
+            display: flex; /* Align input and button horizontally */
+            margin-top: 10px;
+        }
+        #userInput {
+            flex-grow: 1; /* Input takes available space */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px 0 0 4px; /* Rounded left corners */
+            margin-right: -1px; /* Overlap borders slightly */
+        }
+        #sendButton {
+            padding: 10px 15px;
+            border: 1px solid #007bff;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 0 4px 4px 0; /* Rounded right corners */
+            transition: background-color 0.2s ease;
+        }
+        #sendButton:hover {
+            background-color: #0056b3;
+        }
+         #sendButton:disabled {
+             background-color: #cccccc;
+             border-color: #cccccc;
+             cursor: not-allowed;
+         }
+        #chatResponseStatus {
+             margin-top: 10px;
+             min-height: 1.2em; /* Reserve space for potential error messages */
+        }
+        .disclaimer {
+             font-size: 0.9em;
+             color: #666;
+             margin-bottom: 15px;
+             padding: 10px;
+             background-color: #f8f9fa;
+             border-left: 3px solid #ffc107; /* Warning color */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Skin Cancer Info Assistant</h1>
+        <nav>
+            <ul>
+                <!-- Update hrefs to your actual routes -->
+                <li><a href="/">Home</a></li>
+                <li><a href="/upload">Upload</a></li>
+                <li><a href="/chatbot_page">Chatbot</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Ask About Skin Cancer</h2>
+        <p class="disclaimer">
+            <strong>Disclaimer:</strong> This chatbot provides general information only and is <strong>not</strong> a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider (like a dermatologist) with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read here.
+        </p>
+
+        <!-- Div to display chat history -->
+        <div id="chatHistory">
+            <!-- Initial bot message (optional) -->
+            <div class="message bot-message">
+                <strong>Bot:</strong> Hello! How can I help you with general information about skin cancer today? Remember, I cannot provide diagnoses.
+            </div>
+            <!-- Chat messages will be appended here by JavaScript -->
+        </div>
+
+        <!-- Input Form -->
+        <form id="chatForm" action="javascript:void(0);"> <!-- Prevent default submit -->
+            <input type="text" id="userInput" placeholder="Ask about symptoms, prevention, risks..." required autocomplete="off">
+            <button type="submit" id="sendButton">Send</button>
+        </form>
+
+        <!-- Area for status messages like errors -->
+        <div id="chatResponseStatus" style="color: red;"></div>
+
+    </main>
+
+    <!-- Link to your JavaScript file -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

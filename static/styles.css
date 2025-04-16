@@ -1,0 +1,247 @@
+/* Global Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #eef2f7;
+    color: #333;
+    transition: background 0.4s, color 0.4s;
+}
+
+/* Header */
+header {
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    color: white;
+    padding: 25px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Navigation */
+nav ul {
+    list-style: none;
+    padding: 0;
+    text-align: center;
+    margin-top: 15px;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 0 18px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Main Container */
+main {
+    width: 85%;
+    margin: 50px auto;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(12px);
+    transition: all 0.4s ease-in-out;
+}
+
+main:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* Buttons */
+button, .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    color: white;
+    padding: 14px 22px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+button:hover, .btn:hover {
+    background: linear-gradient(135deg, #0056b3, #0094cc);
+    transform: scale(1.07);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    transform: scale(0.96);
+}
+
+/* Forms */
+input[type="text"], input[type="file"] {
+    width: 85%;
+    padding: 14px;
+    margin: 15px 0;
+    border: 2px solid #007bff;
+    border-radius: 10px;
+    font-size: 17px;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #00d4ff;
+    box-shadow: 0 5px 10px rgba(0, 212, 255, 0.25);
+    outline: none;
+}
+
+/* AI Explanation Box */
+#ai-explanation-container {
+    width: 85%;
+    margin: 30px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    text-align: center;
+    transition: background 0.3s, transform 0.3s;
+}
+
+#ai-explanation-container:hover {
+    transform: translateY(-5px);
+}
+
+#ai-explanation-title {
+    font-size: 26px;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 12px;
+}
+
+#ai-explanation-text {
+    font-size: 18px;
+    line-height: 1.8;
+    color: #333;
+    padding: 18px;
+    background: white;
+    border-left: 6px solid #007bff;
+    border-radius: 8px;
+    text-align: left;
+    transition: border 0.3s;
+}
+
+/* Loading Spinner */
+#loading {
+    display: none;
+    text-align: center;
+    margin-top: 20px;
+}
+
+#loading img {
+    width: 55px;
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Dark Mode */
+.dark-mode {
+    background-color: #181818;
+    color: white;
+}
+
+.dark-mode main {
+    background: rgba(40, 40, 40, 0.92);
+    color: white;
+}
+
+.dark-mode #ai-explanation-text {
+    background: rgba(50, 50, 50, 0.92);
+    color: white;
+    border-left: 6px solid #ffeb3b;
+}
+
+.dark-mode input[type="text"], .dark-mode input[type="file"] {
+    background: #2d2d2d;
+    color: white;
+    border: 2px solid #ffeb3b;
+}
+
+.dark-mode input:focus {
+    border-color: #ffcc00;
+    box-shadow: 0 5px 10px rgba(255, 212, 0, 0.4);
+}
+
+.dark-mode button, .dark-mode .btn {
+    background: linear-gradient(135deg, #ffcc00, #ff9900);
+    color: black;
+}
+
+.dark-mode button:hover, .dark-mode .btn:hover {
+    background: linear-gradient(135deg, #ff9900, #ff6600);
+}
+
+/* Dark Mode Toggle */
+.toggle-dark-mode {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #222;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.toggle-dark-mode:hover {
+    background: #444;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main {
+        width: 92%;
+        padding: 25px;
+    }
+
+    nav ul li {
+        display: block;
+        margin: 12px 0;
+    }
+
+    input[type="text"], input[type="file"] {
+        width: 100%;
+    }
+
+    .toggle-dark-mode {
+        top: 15px;
+        right: 15px;
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+}
+
+
+
+
+
+
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnosis Results</title>
+    <!-- Make sure styles.css exists or remove this line -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Optional: Add some basic styling for the explanation */
+        .explanation-content {
+            background-color: #f9f9f9;
+            border-left: 4px solid #007bff;
+            padding: 10px 15px;
+            margin-top: 10px;
+            white-space: pre-wrap; /* Important: Preserves line breaks and spaces */
+            word-wrap: break-word; /* Ensures long lines wrap */
+            font-family: sans-serif; /* Or your preferred font */
+            line-height: 1.6;
+        }
+        .explanation-content h4 { /* Style headings if AI uses them */
+             margin-top: 1em;
+             margin-bottom: 0.5em;
+             font-weight: bold;
+        }
+        .explanation-content ul, .explanation-content ol { /* Style lists if AI uses them */
+             margin-left: 20px;
+             padding-left: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Diagnosis Results</h1>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/upload">Upload</a></li>
+                <li><a href="/chatbot">Chatbot</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Analysis Result</h2>
+        <!-- Ensure get_uploaded_file route exists and serves the image -->
+        {% if filename %}
+        <img src="{{ url_for('get_uploaded_file', filename=filename) }}" alt="Uploaded Image" width="300" style="max-width: 100%; height: auto;">
+        {% else %}
+        <p>No image found.</p>
+        {% endif %}
+
+        <p><strong>Prediction:</strong> {{ prediction }}</p>
+        <p><strong>Confidence Score:</strong> {{ confidence|round(4) }}</p> <!-- Use round filter -->
+
+        <h3>AI Explanation:</h3>
+        <!-- Use a div with pre-wrap styling to better handle line breaks -->
+        <div class="explanation-content">
+            {{ explanation|safe }}
+        </div>
+        <br> <!-- Add some space -->
+        <a href="/upload" class="btn">Upload Another Image</a> <!-- Add class if defined in styles.css -->
+    </main>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
